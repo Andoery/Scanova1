@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SCANOVA</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#101B32">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--bg:#101B32;--card:#172943;--card2:#1f3558;--tx:#fff;--mut:#9fb0cc;--cy:#08CFFF;--bl:#176BFF;--bd:rgba(8,207,255,.2);--ok:#2ecc71;--warn:#ffb020;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-theme="light"]{--bg:#EEF4FB;--card:#fff;--card2:#e1ebf7;--tx:#101B32;--mut:#51627f;--bd:rgba(23,107,255,.22);color-scheme:light}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:var(--bg)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.app{max-width:480px;margin:0 auto;padding:16px 16px 100px}
+.screen{display:none}.screen.on{display:block;animation:in .35s ease}
+@keyframes in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+h2{margin:6px 0 14px}h3{margin:22px 0 10px;font-size:15px;color:var(--mut)}
+.mut{color:var(--mut);font-size:14px}
+.hd{display:flex;align-items:center;gap:12px}.lg{width:52px;height:52px}
+.br{font-weight:900;font-size:26px;letter-spacing:1px}.br span{color:var(--cy)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:22px;padding:18px;margin-bottom:12px}
+.hero{text-align:center;background:linear-gradient(160deg,var(--card),var(--card2));box-shadow:0 0 30px rgba(8,207,255,.12)}
+.mini{width:150px;height:90px;margin:4px auto 16px;border:3px solid var(--cy);border-radius:16px;position:relative;overflow:hidden;box-shadow:0 0 16px var(--cy)}
+.mini i,.cam .ln{position:absolute;left:0;right:0;height:3px;background:var(--cy);box-shadow:0 0 14px var(--cy);animation:sc 2.2s ease-in-out infinite alternate}
+@keyframes sc{from{top:0}to{top:calc(100% - 3px)}}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:16px;padding:15px;font-size:16px;font-weight:800;background:linear-gradient(90deg,var(--cy),var(--bl));color:#04101f;text-decoration:none;cursor:pointer;margin-top:10px}
+.btn.g{background:var(--card2);color:var(--tx)}.off{opacity:.4;pointer-events:none}
+.row{display:flex;gap:10px}.row .btn{margin-top:10px}
+.ops{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.op{border:0;border-radius:16px;padding:22px 6px;font-weight:900;font-size:17px;cursor:pointer}
+.chips{display:flex;gap:8px;margin-bottom:14px}
+.chip{flex:1;border:2px solid transparent;border-radius:14px;padding:12px 4px;font-weight:800;cursor:pointer;opacity:.55}.chip.on{opacity:1;border-color:var(--cy);box-shadow:0 0 12px var(--cy)}
+.it{display:flex;align-items:center;gap:12px}.dot{width:14px;height:14px;border-radius:50%}
+.it b{flex:1}
+input{width:100%;background:var(--bg);color:var(--tx);border:1px solid var(--bd);border-radius:14px;padding:14px;font-size:20px;letter-spacing:3px}
+.err{color:#ff6b6b;font-size:14px;min-height:20px;margin-top:6px}
+.cam{position:relative;height:56vh;min-height:300px;border-radius:24px;overflow:hidden;background:#000 center/cover}
+.cam video{width:100%;height:100%;object-fit:cover}
+.fr{position:absolute;inset:16% 8%;border:3px solid var(--cy);border-radius:18px;box-shadow:0 0 22px var(--cy),inset 0 0 22px rgba(8,207,255,.3)}
+.fr .ln{left:0;right:0}
+.nav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-around;background:var(--card);border-top:1px solid var(--bd);padding:8px 0 calc(8px + env(safe-area-inset-bottom,0px))}
+.nav button{background:none;border:0;color:var(--mut);font-size:12px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:4px 18px}
+.nav button span:first-child{font-size:22px}.nav button.on{color:var(--cy)}
+.set{display:flex;gap:8px}.set button{flex:1;border:1px solid var(--bd);background:var(--card2);color:var(--tx);border-radius:14px;padding:12px 4px;cursor:pointer;font-size:15px}
+.set button.on{border-color:var(--cy);box-shadow:0 0 10px var(--cy)}
+.tag{font-size:12px;padding:3px 9px;border-radius:99px;background:rgba(46,204,113,.18);color:var(--ok)}.tag.w{background:rgba(255,176,32,.18);color:var(--warn)}
+.foot{text-align:center;font-size:12px;color:var(--mut);margin-top:26px}
+a.l{display:block;color:var(--cy);padding:8px 0;text-decoration:none;font-weight:700}
+.code{font:700 20px/1.3 ui-monospace,monospace;letter-spacing:1px;word-break:break-all;margin:6px 0}
+.splash{position:fixed;inset:0;z-index:9;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;transition:opacity .5s}
+.splash.hide{opacity:0}.splash .lg{width:110px;height:110px;animation:pu 1.4s ease-in-out infinite alternate}
+@keyframes pu{from{transform:scale(.9);filter:drop-shadow(0 0 4px var(--cy))}to{transform:scale(1.05);filter:drop-shadow(0 0 22px var(--cy))}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#176BFF"/><stop offset="1" stop-color="#101B32"/></linearGradient></defs>
+<symbol id="logo" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="url(#g)"/><path d="M8 20V12a4 4 0 0 1 4-4h8M44 8h8a4 4 0 0 1 4 4v8M56 44v8a4 4 0 0 1-4 4h-8M20 56h-8a4 4 0 0 1-4-4v-8" fill="none" stroke="#08CFFF" stroke-width="3" stroke-linecap="round"/><path d="M43 22c-4-4-14-5-18 0-4 5 2 9 8 11s12 6 8 12c-4 5-13 4-18 0" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/><rect x="38" y="38" width="12" height="10" rx="2" fill="#F5D76E" transform="rotate(-20 44 43)"/></symbol></svg>
+
+<div class="splash" id="sp"><svg class="lg"><use href="#logo"/></svg><div class="br">SCAN<span>OVA</span></div><div class="mut" data-i="tag"></div></div>
+
+<div class="app">
+<section id="home" class="screen on">
+ <div class="hd"><svg class="lg"><use href="#logo"/></svg><div><div class="br">SCAN<span>OVA</span></div><div class="mut" data-i="tag"></div></div></div>
+ <p class="mut" data-i="welcome" style="margin:16px 0 12px"></p>
+ <div class="card hero"><div class="mini"><i></i></div><button class="btn" onclick="go('scan')">📷 <span data-i="scanBtn"></span></button></div>
+ <h3 data-i="ops"></h3><div class="ops" id="opsH"></div>
+ <h3 data-i="recent"></h3><div id="recH"></div>
+ <p class="foot">Designed by H. Andoniaina</p>
+</section>
+
+<section id="scan" class="screen">
+ <div class="cam" id="cam"><video id="v" autoplay playsinline muted></video><div class="fr"><div class="ln"></div></div></div>
+ <button class="btn" onclick="$('#cf').click()">📷 <span data-i="shot"></span></button><input type="file" accept="image/*" capture="environment" id="cf" hidden onchange="gal(this)">
+ <div class="row"><button class="btn g" onclick="flash()">🔦 <span data-i="flash"></span></button><button class="btn g" onclick="$('#gf').click()">🖼️ <span data-i="gal"></span></button></div>
+ <input type="file" accept="image/*" id="gf" hidden onchange="gal(this)">
+ <div class="card" style="margin-top:12px"><span class="mut" id="camNote"></span></div>
+ <button class="btn" onclick="go('pin')">⌨️ <span data-i="enter"></span></button>
+</section>
+
+<section id="pin" class="screen">
+ <h2 data-i="pinT"></h2>
+ <div class="cam" id="ph" style="display:none;height:170px;min-height:0;margin-bottom:12px;background-size:contain;background-repeat:no-repeat"></div><div class="mut" data-i="opL" style="margin-bottom:8px"></div><div class="chips" id="opsP"></div>
+ <div class="card"><div class="mut" id="pinL" style="margin-bottom:8px"></div>
+  <input id="pi" type="password" inputmode="numeric" autocomplete="off" maxlength="20" oninput="pinIn(this)">
+  <div class="err" id="pe"></div>
+  <div class="row"><button class="btn g" onclick="tg()"><span id="tgl"></span></button><button class="btn g" onclick="$('#pi').focus()">✏️ <span data-i="edit"></span></button></div></div>
+ <button class="btn" onclick="cont()"><span data-i="cont"></span> ➜</button>
+</section>
+
+<section id="rech" class="screen">
+ <h2 data-i="rechT"></h2>
+ <div class="card"><div class="it"><span class="dot" id="rd"></span><b id="rn"></b></div>
+  <h3 data-i="sum" style="margin-top:16px"></h3>
+  <div class="mut" data-i="code"></div><div class="code" id="rc"></div>
+  <div class="mut" id="rm" style="margin-top:8px"></div></div>
+ <a class="btn" id="dial" href="#" onclick="logIt()">📞 <span data-i="dial"></span></a>
+ <button class="btn g" id="cp" onclick="cpy()"><span data-i="copy"></span></button>
+ <p class="mut" data-i="conf" style="margin-top:14px"></p>
+</section>
+
+<section id="hist" class="screen"><h2 data-i="hist"></h2><div id="hl"></div><button class="btn g" onclick="clr()"><span data-i="clear"></span></button></section>
+
+<section id="set" class="screen">
+ <h2 data-i="nSet"></h2>
+ <h3 data-i="lang"></h3><div class="set" id="sl"></div>
+ <h3 data-i="theme"></h3><div class="set"><button id="td" onclick="th('dark')"></button><button id="tl" onclick="th('light')"></button></div>
+ <h3 data-i="opsM"></h3><div class="card" id="sop"></div>
+ <button class="btn g" onclick="go('about')">ℹ️ <span data-i="about"></span></button>
+ <p class="foot">Designed by H. Andoniaina</p>
+</section>
+
+<section id="about" class="screen">
+ <div style="text-align:center"><svg class="lg" style="width:96px;height:96px"><use href="#logo"/></svg><div class="br">SCAN<span>OVA</span></div><div class="mut" data-i="tag"></div></div>
+ <div class="card" style="margin-top:16px"><b>Herimampionona Andoniaina</b><div class="mut">Founder &amp; Developer</div><div class="mut" style="margin:6px 0">Designed &amp; Developed by Herimampionona Andoniaina</div>
+  <a class="l" href="https://www.facebook.com/herimampionona.andoniaina" target="_blank" rel="noopener">Facebook</a>
+  <a class="l" href="mailto:andoerlyce@gmail.com">andoerlyce@gmail.com</a>
+  <a class="l" href="tel:0385579886">0385579886</a></div>
+ <div class="card"><div class="it"><span data-i="ver"></span><b style="text-align:right">1.0.0 (1)</b></div>
+  <div class="it" style="margin-top:6px"><span data-i="rel"></span><b style="text-align:right">10/11/2026</b></div></div>
+ <div class="card"><h3 style="margin:0 0 6px" data-i="log"></h3><div class="mut">1.0.0 · 10/11/2026</div><div data-i="log1"></div></div>
+ <p class="foot">© 2026 SCANOVA. <span data-i="rights"></span></p>
+</section>
+</div>
+
+<nav class="nav"><button data-g="home" onclick="go('home')"><span>🏠</span><span data-i="nHome"></span></button><button data-g="hist" onclick="go('hist')"><span>🕘</span><span data-i="hist"></span></button><button data-g="set" onclick="go('set')"><span>⚙️</span><span data-i="nSet"></span></button></nav>
+
+<script>
+const $=s=>document.querySelector(s);
+/* Configuration USSD par pays et opérateur — ajouter ici de nouveaux pays/opérateurs */
+const CONFIG={MG:[
+ {id:"yas",n:"Yas",s:"Telma",c:"#FFD400",t:"#111",mode:"direct",tpl:"#321*{PIN}#",len:14,ok:true},
+ {id:"orange",n:"Orange",c:"#FF7900",t:"#fff",mode:"menu",code:"#123#",len:14,ok:true},
+ {id:"airtel",n:"Airtel",c:"#E40000",t:"#fff",mode:"menu",code:"*888#",len:0,ok:false}]};
+const COUNTRY="MG",OPS=CONFIG[COUNTRY];
+const T={
+fr:{shot:"PRENDRE UNE PHOTO",tag:"Scan ta recharge.",welcome:"Bienvenue sur SCANOVA",scanBtn:"SCANNER MA CARTE",ops:"Nos opérateurs",recent:"Dernières activités",none:"Aucune activité",nHome:"Accueil",hist:"Historique",nSet:"Paramètres",flash:"Flash",gal:"Galerie",note:"La reconnaissance automatique (OCR) n’est pas encore disponible. Saisissez le PIN manuellement.",camErr:"Aperçu direct indisponible : utilisez PRENDRE UNE PHOTO, puis saisissez le PIN.",enter:"SAISIR LE PIN",pinT:"Vérifier le PIN",opL:"Opérateur",pinL:"PIN",show:"Afficher",hide:"Masquer",edit:"Modifier",cont:"CONTINUER",pinErr:"Le PIN doit contenir",digits:"chiffres.",opErr:"Choisissez un opérateur.",rechT:"Recharge",sum:"Résumé",code:"Code USSD",dial:"OUVRIR LE COMPOSEUR",conf:"Rien n’est envoyé automatiquement : vous devez appuyer sur Appeler pour confirmer.",nOrange:"Le menu Orange s’ouvre ; saisissez ensuite le PIN préparé (bouton Copier).",nAirtel:"Seul le menu Airtel s’ouvre. Format du PIN à confirmer.",copy:"Copier le PIN",copied:"Copié ✔",clear:"Effacer l’historique",lang:"Langue",theme:"Thème",dark:"Sombre",light:"Clair",opsM:"Opérateurs",okT:"Vérifié",tbc:"À confirmer",about:"À propos de SCANOVA",ver:"Version installée",rel:"Date de publication",rights:"Tous droits réservés.",log:"Historique des versions",log1:"Première version : design, caméra, USSD configurable, 3 langues. OCR à venir."},
+mg:{shot:"haka sary".toUpperCase(),tag:"Scano ny recharge-nao.",welcome:"Tonga soa eto amin’ny SCANOVA",scanBtn:"SCANNER NY KARATRAKO",ops:"Ny opérateur",recent:"Hetsika farany",none:"Tsy mbola misy hetsika",nHome:"Fandraisana",hist:"Tantara",nSet:"Fikirana",flash:"Flash",gal:"Galerie",note:"Mbola tsy azo ampiasaina ny famakiana ho azy (OCR). Soraty tanana ny PIN.",camErr:"Tsy azo ampiasaina ny aperçu mivantana : tsindrio HAKA SARY, avy eo soraty ny PIN.",enter:"HAMPIDIRINA NY PIN",pinT:"Hamarino ny PIN",opL:"Opérateur",pinL:"PIN",show:"Asehoy",hide:"Afeno",edit:"Ovaina",cont:"HITOVY",pinErr:"Tsy maintsy misy isa",digits:"ny PIN.",opErr:"Safidio ny opérateur.",rechT:"Recharge",sum:"Famintinana",code:"Code USSD",dial:"HAMPISOKATRA NY DIALER",conf:"Tsy misy alefa ho azy : tsindrio ny Antso (Appeler) mba hanamarinana.",nOrange:"Misokatra ny menu Orange ; ampidiro avy eo ny PIN efa voaomana (bokotra Adika).",nAirtel:"Ny menu Airtel ihany no misokatra. Mbola hamafisina ny format an’ny PIN.",copy:"Adikao ny PIN",copied:"Voadika ✔",clear:"Fafana ny tantara",lang:"Fiteny",theme:"Fomba fisehoana",dark:"Maizina",light:"Mazava",opsM:"Opérateur",okT:"Voamarina",tbc:"Hamafisina",about:"Momba ny SCANOVA",ver:"Version napetraka",rel:"Daty namoahana",rights:"Voatokana ny zo rehetra.",log:"Tantaran’ny version",log1:"Version voalohany : design, camera, USSD azo ovaina, fiteny 3. OCR ho avy."},
+en:{shot:"TAKE A PHOTO",tag:"Scan your top-up.",welcome:"Welcome to SCANOVA",scanBtn:"SCAN MY CARD",ops:"Our operators",recent:"Recent activity",none:"No activity yet",nHome:"Home",hist:"History",nSet:"Settings",flash:"Flash",gal:"Gallery",note:"Automatic recognition (OCR) is not available yet. Please enter the PIN manually.",camErr:"Live preview unavailable: use TAKE A PHOTO, then enter the PIN.",enter:"ENTER THE PIN",pinT:"Check the PIN",opL:"Operator",pinL:"PIN",show:"Show",hide:"Hide",edit:"Edit",cont:"CONTINUE",pinErr:"The PIN must have",digits:"digits.",opErr:"Choose an operator.",rechT:"Top-up",sum:"Summary",code:"USSD code",dial:"OPEN THE DIALER",conf:"Nothing is sent automatically: you must press Call to confirm.",nOrange:"The Orange menu opens; then enter the prepared PIN (Copy button).",nAirtel:"Only the Airtel menu opens. PIN format to be confirmed.",copy:"Copy the PIN",copied:"Copied ✔",clear:"Clear history",lang:"Language",theme:"Theme",dark:"Dark",light:"Light",opsM:"Operators",okT:"Verified",tbc:"To confirm",about:"About SCANOVA",ver:"Installed version",rel:"Release date",rights:"All rights reserved.",log:"Version history",log1:"First version: design, camera, configurable USSD, 3 languages. OCR coming."}};
+const FL={fr:"🇫🇷 Français",mg:"🇲🇬 Malagasy",en:"🇬🇧 English"};
+const st={lang:"fr",theme:"dark",op:null,pin:"",show:false,hist:[],fl:false};
+function sg(k,d){try{const v=localStorage.getItem("scanova_"+k);return v===null?d:JSON.parse(v)}catch(e){return d}}
+function ss(k,v){try{localStorage.setItem("scanova_"+k,JSON.stringify(v))}catch(e){}}
+const nl=(navigator.language||"fr").slice(0,2);
+st.lang=sg("lang",T[nl]?nl:"fr");st.theme=sg("theme","dark");st.hist=sg("hist",[]);
+const t=k=>(T[st.lang]&&T[st.lang][k])||T.fr[k];
+const op=()=>OPS.find(o=>o.id===st.op);
+function tile(o,f){return `<button class="op" style="background:${o.c};color:${o.t}" onclick="${f}('${o.id}')">${o.n}</button>`}
+function pick(id,stay){st.op=id;if(stay)render();else go("pin")}
+function render(){
+ document.documentElement.dataset.theme=st.theme;document.documentElement.lang=st.lang;
+ document.querySelectorAll("[data-i]").forEach(e=>e.textContent=t(e.dataset.i));
+ $("#opsH").innerHTML=OPS.map(o=>tile(o,"pick")).join("");
+ $("#opsP").innerHTML=OPS.map(o=>`<button class="chip" style="background:${o.c};color:${o.t};${o.id===st.op?"":""}" onclick="pick('${o.id}',1)">${o.n}</button>`).join("");
+ document.querySelectorAll("#opsP .chip").forEach((c,i)=>c.classList.toggle("on",OPS[i].id===st.op));
+ const o=op();$("#pinL").textContent=t("pinL")+(o&&o.len?` (${o.len})`:"");
+ $("#pi").type=st.show?"text":"password";$("#tgl").textContent=(st.show?"🙈 "+t("hide"):"👁️ "+t("show"));
+ $("#camNote").textContent=st.camErr?t("camErr"):t("note");
+ const row=h=>`<div class="card it"><span class="dot" style="background:${h.c}"></span><b>${h.n}</b><span class="mut">${new Date(h.ts).toLocaleString(st.lang==="mg"?"fr":st.lang,{dateStyle:"short",timeStyle:"short"})}</span></div>`;
+ $("#recH").innerHTML=st.hist.length?st.hist.slice(0,3).map(row).join(""):`<div class="mut">${t("none")}</div>`;
+ $("#hl").innerHTML=st.hist.length?st.hist.map(row).join(""):`<div class="mut">${t("none")}</div>`;
+ $("#sl").innerHTML=Object.keys(FL).map(k=>`<button class="${k===st.lang?"on":""}" onclick="lg('${k}')">${FL[k]}</button>`).join("");
+ $("#td").textContent="🌙 "+t("dark");$("#tl").textContent="☀️ "+t("light");
+ $("#td").className=st.theme==="dark"?"on":"";$("#tl").className=st.theme==="light"?"on":"";
+ $("#sop").innerHTML=OPS.map(o=>`<div class="it" style="padding:6px 0"><span class="dot" style="background:${o.c}"></span><b>${o.n}</b><span class="tag ${o.ok?"":"w"}">${o.ok?t("okT"):t("tbc")}</span></div>`).join("");
+ if(o&&$("#rech").classList.contains("on"))rRech(o);
+}
+function rRech(o){
+ $("#rd").style.background=o.c;$("#rn").textContent=o.n+(o.s?" / "+o.s:"")+" · Madagascar";
+ let code,uri,msg="",cp=false;
+ if(o.mode==="direct"&&o.ok){code=o.tpl.replace("{PIN}","•".repeat(st.pin.length));uri="tel:"+encodeURIComponent(o.tpl.replace("{PIN}",st.pin))}
+ else{code=o.code;uri="tel:"+encodeURIComponent(o.code);msg=o.id==="orange"?t("nOrange"):t("nAirtel");cp=o.ok&&!!st.pin}
+ $("#rc").textContent=code;$("#rm").textContent=msg;$("#dial").href=uri;$("#cp").style.display=cp?"flex":"none";$("#cp").firstChild.textContent=t("copy");
+}
+function go(n){
+ document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("on",s.id===n));
+ document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("on",b.dataset.g===n));
+ n==="scan"?camOn():camOff();render();scrollTo(0,0);
+}
+function lg(k){st.lang=k;ss("lang",k);render()}
+function th(k){st.theme=k;ss("theme",k);render()}
+function tg(){st.show=!st.show;render()}
+function pinIn(e){e.value=e.value.replace(/\D/g,"");st.pin=e.value;$("#pe").textContent=""}
+function cont(){
+ const o=op();if(!o){$("#pe").textContent=t("opErr");return}
+ if(o.len&&(st.pin.length!==o.len)){$("#pe").textContent=`${t("pinErr")} ${o.len} ${t("digits")}`;return}
+ go("rech");
+}
+function logIt(){st.hist.unshift({n:op().n,c:op().c,ts:Date.now()});st.hist=st.hist.slice(0,50);ss("hist",st.hist);render()}
+function cpy(){try{navigator.clipboard.writeText(st.pin).then(()=>{$("#cp").firstChild.textContent=t("copied")})}catch(e){}}
+function clr(){st.hist=[];ss("hist",[]);render()}
+let stream=null;st.camErr=false;
+async function camOn(){
+ try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}});$("#v").srcObject=stream;st.camErr=false}
+ catch(e){st.camErr=true}
+ render();
+}
+function camOff(){if(stream){stream.getTracks().forEach(x=>x.stop());stream=null}st.fl=false}
+function flash(){if(!stream)return;st.fl=!st.fl;stream.getVideoTracks()[0].applyConstraints({advanced:[{torch:st.fl}]}).catch(()=>{})}
+function gal(i){if(i.files[0]){const u=`url(${URL.createObjectURL(i.files[0])})`;$("#cam").style.backgroundImage=u;$("#ph").style.backgroundImage=u;$("#ph").style.display="block"}}
+if("serviceWorker"in navigator){addEventListener("load",()=>{try{navigator.serviceWorker.register("sw.js")}catch(e){}})}
+render();
+setTimeout(()=>{$("#sp").classList.add("hide");setTimeout(()=>$("#sp").remove(),500)},1700);
+</script>
+</body>
+</html>
